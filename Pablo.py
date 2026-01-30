@@ -1,5 +1,5 @@
 import pyxel 
-import random 
+import random
 #from Nathan import Grass
 #from Melina import Sheep
 #from Melina import Wolf
@@ -72,7 +72,6 @@ class Sheep:
                 dico[key][0].existence = 0
                 
     def Reproduction(self,dico,key,l_free):
-        x, y = key
         if self.energy > 50 and l_free != []:
             self.energy -=20
             new_sheep = Sheep('mouton', 0, 20)
@@ -116,7 +115,6 @@ class Wolf:
         for key in dico:
             x, y = key
             l_free=[]
-           
             animal = dico[key][1]
             herbe = dico[key][0]
             if (x+1,y) in dico and dico[(x+1,y)][1] is None:
@@ -136,7 +134,7 @@ class Wolf:
                 animal.Mort(dico,key)
                 animal.MangeAdjSheep(dico,key)
             
-                if animal.energy > 50:
+                if animal.energy > 80:
                     animal.Reproduction(dico,key,l_free)
             
                 animal.Move(dico,key, l_free)
@@ -157,46 +155,35 @@ class Wolf:
         Ate_sheep=False
         key_ate_sheep=None
         for d in [(x+1,y),(x-1,y),(x,y-1),(x,y+1)]:
-                if d in dico and dico[d][1].type=="mouton":
+                if d in dico and dico[d][1]!= None and dico[d][1].type=="mouton":
                     l_adj.append(d)
         if l_adj!=[]:
-            key_ate_sheep=random.choice()
+            key_ate_sheep=random.choice(l_adj)
             Ate_sheep=True
-            self.energy += 15
-            dico[key][0].existence = 0
+            self.energy += 30
+            dico[key_ate_sheep] = (dico[key][0],None)
         return (Ate_sheep,key_ate_sheep)
                 
     def Reproduction(self,dico,key,l_free):
-        x, y = key
-        if self.energy > 50 and l_free != []:
+        if self.energy > 80 and l_free != []:
             self.energy -=20
-            new_wolf = Wolf('loup', 0, 20)
+            new_wolf = Wolf('loup', 0, 40)
             pos_baby = random.choice(l_free)
             dico[pos_baby] = (dico[pos_baby][0], new_wolf)
         
             
     def Move(self,dico,key, l_free):
+        Ate_sheep, key_ate_sheep = self.MangeAdjSheep(dico,key)
         animal = dico[key][1]
-        # Regarde les voisins pour voir s'il y a de l'herbe"""
-        l_grass = []
-        x, y = key
-        if (x+1,y) in dico and dico[(x+1,y)][1].type =="":
-            l_grass.append((x+1,y))
-        if (x-1,y) in dico and dico[(x-1,y)][0].existence == 1:
-            l_grass.append((x-1,y))
-        if (x,y+1) in dico and dico[(x,y+1)][0].existence == 1:
-            l_grass.append((x,y+1))
-        if (x,y-1) in dico and dico[(x,y-1)][0].existence == 1:
-            l_grass.append((x,y-1))
-        new_pos = (x,y)       
-        if len(l_grass) > 0:
-            new_pos = random.choice(l_grass)
-        elif len(l_grass) == 0 and len(l_free) > 0:
-            # Déplace le mouton
-            new_pos = random.choice(l_free) 
-        if new_pos != (x,y) : 
+        new_pos=key
+        if Ate_sheep :
+            new_pos = key_ate_sheep
+        elif len(l_free)>0 : 
+            new_pos = random.choice(l_free)
+        if new_pos != key : 
             dico[new_pos] = (dico[new_pos][0], animal)
             dico[key] = (dico[key][0], None)
+    
 
 #configuration initiale
 GRID_SIZE = 20
@@ -219,6 +206,7 @@ class Grid :
         self.draw()
         self.update_grass()
         self.update_sheep()
+        self.update_wolf()
         
     def update_grass(self):
         for x in range(GRID_SIZE):
@@ -227,6 +215,9 @@ class Grid :
     
     def update_sheep(self):
         Sheep.update(self,self.grille)
+    
+    def update_wolf(self):
+        Wolf.update(self,self.grille)
 
     
     def draw(self):
