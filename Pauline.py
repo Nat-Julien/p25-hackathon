@@ -51,7 +51,7 @@ class Sheep:
                 animal.OnGrass(dico,key)
             
                 if animal.energy > 50:
-                    animal.Reproduction(dico,key)
+                    animal.Reproduction(dico,key,l_free,dic_new)
             
                 animal.Move(dico,dic_new,key, l_free)
                                   
@@ -69,7 +69,7 @@ class Sheep:
                 self.energy += 15
                 dico[key][0].existence = 0
                 
-    def Reproduction(self,dico,key):
+    def Reproduction(self,dico,key,l_free,dic_new):
         x, y = key
         l_reprod = []
         if (x+1,y) in dico and dico[(x+1,y)][1] and dico[(x+1,y)][1].type == 'mouton':
@@ -85,6 +85,8 @@ class Sheep:
             self.energy -= 20
             new_pos = random.choice(l_reprod)
             new_sheep = Sheep('mouton', 0, 20)
+            pos_baby = random.choice(l_free)
+            dic_new[pos_baby] = (dico[pos_baby][0], new_sheep)
             
     def Move(self,dico,dic_new,key, l_free):
         # Regarde les voisins pour voir s'il y a de l'herbe"""
