@@ -93,7 +93,6 @@ class Sheep:
             dic_new[key] = (dico[key][0], None)
         elif len(l_grass) == 0 and len(l_free) > 0:
             # Déplace le mouton
-            print(l_free)
             new_pos = random.choice(l_free)  
             dic_new[new_pos] = (dico[new_pos][0], animal)
             dic_new[key] = (dico[key][0], None)
