@@ -8,3 +8,10 @@ les valeurs sont une liste : [presence_herbe,age_herbe,(animal,age_animal,energi
 - animal : "loup", "mouton" ou None
 - age_animal : int age de l'animal, et si pas d'animal sur la case : None
 - energie_animal : int ernergie de l'animal, et si pas d'animal sur la case : None
+
+
+TRAVAIL EFFECTUE : 
+Pablo : positionnement initial des animaux 
+Pauline : grille initiale 
+Melina : classe mouton
+Nathan : classe loup 
