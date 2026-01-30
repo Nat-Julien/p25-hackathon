@@ -56,6 +56,7 @@ class Sheep:
                 animal.Move(dico,dic_new,key, l_free)
                                   
         dico[key] = dic_new[key]
+        return dico
                
                
     def Mort(self,dico,key,dic_new):
