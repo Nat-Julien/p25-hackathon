@@ -46,6 +46,7 @@ class Sheep:
             if dico[key][1]!= None and animal.type == "mouton":
                 
                 animal.age += 1
+                animal.energy -=1
                 
                 animal.Mort(dico,key)
                 animal.OnGrass(dico,key)
@@ -72,22 +73,12 @@ class Sheep:
                 
     def Reproduction(self,dico,key,l_free):
         x, y = key
-        l_reprod = []
-        if (x+1,y) in dico and dico[(x+1,y)][1] and dico[(x+1,y)][1].type == 'mouton':
-            l_reprod.append((x+1,y))
-        elif (x-1,y) in dico and dico[(x-1,y)][1] and dico[(x-1,y)][1].type == 'mouton':
-            l_reprod.append((x-1,y))
-        elif (x,y+1) in dico and dico[(x,y+1)][1] and dico[(x,y+1)][1].type == 'mouton':
-            l_reprod.append((x,y+1))
-        elif (x,y-1) in dico and dico[(x,y-1)][1] and dico[(x,y-1)][1].type == 'mouton':
-            l_reprod.append((x,y-1))
-                    
-        if len(l_reprod) > 0:
-            self.energy -= 20
-            new_pos = random.choice(l_reprod)
+        if self.energy > 50 and l_free != []:
+            self.energy -=20
             new_sheep = Sheep('mouton', 0, 20)
             pos_baby = random.choice(l_free)
             dico[pos_baby] = (dico[pos_baby][0], new_sheep)
+        
             
     def Move(self,dico,key, l_free):
         animal = dico[key][1]
