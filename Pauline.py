@@ -54,8 +54,8 @@ class Sheep:
                     animal.Reproduction(dico,key,l_free,dic_new)
             
                 animal.Move(dico,dic_new,key, l_free)
-                                  
-        dico[key] = dic_new[key]
+        dico = dic_new.copy()                  
+        
         return dico
                
                
@@ -111,6 +111,7 @@ class Sheep:
             
         dic_new[new_pos] = (dico[new_pos][0], animal)
         dic_new[key] = (dico[key][0], None)
+        
 
 class Wolf:
     def __init__(self, type, age, energy):
@@ -146,9 +147,7 @@ class Grid :
                 Grass.update(self.grille[(x,y)][0])
     
     def update_sheep(self):
-        for x in range(GRID_SIZE):
-            for y in range(GRID_SIZE):
-                Sheep.update(self.grille[(x,y)][1],self.grille)
+        Sheep.update(self,self.grille)
 
     
     def draw(self):
