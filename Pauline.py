@@ -5,7 +5,7 @@ import random
 #from Melina import Wolf
 
 
-class Grass :
+class Grass():
     def __init__(self,existence,regeneration):
         self.existence=existence
         self.regeneration=regeneration
