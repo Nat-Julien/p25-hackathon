@@ -1,5 +1,26 @@
 import pyxel 
 import random
+#from Nathan import Grass
+#from Melina import Sheep
+#from Melina import Wolf
+
+
+class Grass :
+    def __init__(self,existence,regeneration):
+        self.existence=existence
+        self.regeneration=regeneration
+
+class Sheep():
+    def __init__(self, type, age, energy):
+        self.type = type
+        self.age = age
+        self.energy = energy
+
+class Wolf():
+    def __init__(self, type, age, energy):
+        self.type = type
+        self.age = age
+        self.energy = energy
 
 #configuration initiale
 GRID_SIZE = 20
@@ -12,8 +33,8 @@ class Grid :
 
     def __init__(self):
         pyxel.init(GRID_SIZE*SIDE,GRID_SIZE*SIDE,title = "Ecosystème")
-        self.grille = self.grid_initiale()
         pyxel.load("Dessins.pyxres")
+        self.grille = self.grid_initiale()
         pyxel.run(self.update,self.draw)
     
     def update(self):
@@ -24,43 +45,56 @@ class Grid :
     def draw(self):
         pyxel.cls(0)
         self.draw_grille()
+        self.draw_animal()
         
 
     def grid_initiale(self):
-        grille = {(x,y):[0,-1,(None,None,None)] for x in range(GRID_SIZE) for y in range(GRID_SIZE)} 
+        grille = {(x,y):[Grass(0,-1),None] for x in range(GRID_SIZE) for y in range(GRID_SIZE)} 
         #(position):[0 si rien, 1 si herbe; age herbe (-1 si jamais eu herbe);("mouton ou loup" ou None;age mouton/age loup (ou None); energy)]
         n = 0
         m = 0
         l = 0
         surface = (GRID_SIZE**2)*INITIAL_GLASS_COVERAGE
-        while n < surface:
+        while n <= surface:
             i,j = random.randint(0,GRID_SIZE-1),random.randint(0,GRID_SIZE-1)
-            if grille[(i,j)][0] == 0 :
-                grille[(i,j)][0] = 1
+            if grille[(i,j)][0].existence == 0 :
+                grille[(i,j)][0].existence = 1
                 n+=1
-        while m < INITIAL_SHEEP :
+        while m <= INITIAL_SHEEP :
             i,j = random.randint(0,GRID_SIZE-1),random.randint(0,GRID_SIZE-1)
-            if self.grille[(i,j)][2][0]== None:
-                self.grille[(i,j)][2][0] == "mouton"
+            if grille[(i,j)][1] == None:
+                grille[(i,j)][1] = Sheep("mouton",0,20)
                 m+=1
-        while l < INITIAL_WOLVES : 
+        while l <= INITIAL_WOLVES : 
             i,j = random.randint(0,GRID_SIZE-1),random.randint(0,GRID_SIZE-1)
-            if self.grille[(i,j)][2][0]== None:
-                self.grille[(i,j)][2][0] == "loup"
-                m+=1
+            if grille[(i,j)][1] == None:
+                grille[(i,j)][1] = Wolf("loup",0,40)
+                l+=1
+        print(grille)
         return grille
+        
     
 
     
     def draw_grille(self):
         for x in range(GRID_SIZE):
             for y in range(GRID_SIZE):
-                if self.grille[(x,y)][0] == 1 :
+                if self.grille[(x,y)][0].existence == 1 :
                     color = 11
                     pyxel.rect(x*SIDE, y*SIDE, SIDE, SIDE, color)
-                else : 
+                else :
                     color = 4
                     pyxel.rect(x*SIDE, y*SIDE, SIDE, SIDE, color)
+            
+    def draw_animal(self):
+        for x in range(GRID_SIZE):
+            for y in range(GRID_SIZE):
+                if self.grille[(x,y)][1] != None : 
+                    if self.grille[(x,y)][1].type =="mouton":
+                        pyxel.blt(x*SIDE,y*SIDE,0,0,0,SIDE,SIDE, colkey=0)
+                    elif self.grille[(x,y)][1].type =="loup":
+                        pyxel.blt(x*SIDE,y*SIDE,0,0,SIDE,SIDE,SIDE, colkey=7)
+
 
 if __name__ == "__main__":
     Grid()
