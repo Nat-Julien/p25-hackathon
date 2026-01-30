@@ -13,5 +13,5 @@ les valeurs sont une liste : [presence_herbe,age_herbe,(animal,age_animal,energi
 TRAVAIL EFFECTUE : 
 Pablo : positionnement initial des animaux 
 Pauline : grille initiale 
-Melina : classe mouton
-Nathan : classe loup 
+Melina : classe mouton, loup
+Nathan : classe herbe
