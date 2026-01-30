@@ -1,2 +1,2 @@
 
-    pyxel.load("Dessins.pyxel")
+    pyxel.load("Dessins.pyxres")
