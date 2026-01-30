@@ -1,0 +1,2 @@
+
+    pyxel.load("Dessins.pyxel")
