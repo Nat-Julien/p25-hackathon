@@ -17,7 +17,7 @@ class Grass:
         if self.regeneration==7:
             self.existence=1
         if self.existence==0 and self.regeneration==-1: #fais spawn de l'herbe aléatoirement
-            if random.random() <= 0.05 : 
+            if random.random() <= 0.09 : 
                 self.existence=1
                 self.regeneration=0
 
