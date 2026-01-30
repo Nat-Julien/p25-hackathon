@@ -1,4 +1,4 @@
-i
+import random as rd
 
 class Sheep():
     def __init__(self, type, age, energy):
@@ -15,10 +15,14 @@ class Sheep():
             
             if isinstance(animal, Sheep):
                 animal.age += 1
+                if animal.age > 50:
+                    dic_new[key] = (dico[key][0], None)
+                    continue
                 
                 # Regarde si on est sur de l'herbe
                 if dico[key][0].existence == 1:
                    animal.energy += 15
+                   continue
                    
                 # Regarde les voisins pour voir s'il y a de l'herbe"""
                 l_grass = []
@@ -32,10 +36,12 @@ class Sheep():
                    l_grass.append((x,y-1))
                 
                 if len(l_grass) > 0:
-                    new_pos = random.choice(l_grass)
+                    new_pos = rd.choice(l_grass)
+                
                 elif len(l_grass) == 0:
                     # Déplace le mouton
                     l_move = [(x+1,y), (x-1,y), (x,y+1), (x,y-1)]
+                    new_pos = rd.choice(l_move)
                     
     
                 dic_new[new_pos] = (dico[new_pos][0], animal)
@@ -44,7 +50,8 @@ class Sheep():
         dico[key] = dic_new[key]
                
 class Wolf():
-    def __init__(self, age, energy):
+    def __init__(self, type, age, energy):
+        self.type = type
         self.age = age
         self.energy = energy
  
