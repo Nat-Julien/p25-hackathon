@@ -1,6 +1,6 @@
-import random as rd
+import random
 
-class Sheep():
+class Sheep:
     def __init__(self, type, age, energy):
         self.type = type
         self.age = age
@@ -11,34 +11,37 @@ class Sheep():
         
         for key in dico:
             x, y = key
+            l_free=[]
             animal = dico[key][1]
             herbe = dico[key][0]
-            l_move = [(x+1,y) if (x+1,y) in dico, (x-1,y) if (x-1,y) in dico, (x,y+1)if (x,y+1) in dico, (x,y-1)if (x,y-1) in dico] # Mouvements possibles
+            if (x+1,y) in dico and dic_new[(x+1,y)][1] is None:
+                l_free.append((x+1,y))
+            if (x-1,y) in dico and dic_new[(x-1,y)][1] is None :
+                l_free.append((x-1,y))
+            if (x,y+1) in dico and dic_new[(x,y+1)][1] is None:
+                l_free.append((x,y+1))
+            if (x,y-1) in dico and dic_new[(x,y-1)][1] is None:
+                l_free.append((x,y-1)) # Mouvements possibles
             
-            if animal.type == 'mouton':
+            if dico[key][1]!= None and animal.type == "mouton":
+                
                 animal.age += 1
                 
-            animal.Mort(dico,key)
-            animal.OnGrass(dico,key)
-                
-            # Cherche les cases libres autour 
-            l_free = [] 
-            for elem in l_move:
-                if dico[elem][1] is None:
-                    l_free.append(elem)
+                animal.Mort(dico,key,dic_new)
+                animal.OnGrass(dico,key)
             
-            if animal.energy > 50:
-                animal.Reproduction(dico,key)
+                if animal.energy > 50:
+                    animal.Reproduction(dico,key,l_free,dic_new)
             
-            animal.Move(dico,dic_new,key, l_free)
+                animal.Move(dico,dic_new,key, l_free)
                                   
         dico[key] = dic_new[key]
                
                
-    def Mort(self,dico,key):
+    def Mort(self,dico,key,dic_new):
         animal = dico[key][1]
         if animal.age > 50 or animal.energy <= 0:
-                    dic_new[key] = (dico[key][0], None)
+            dic_new[key] = (dico[key][0], None)
                     
     
     def OnGrass(self,dico,key):
@@ -46,7 +49,7 @@ class Sheep():
                 self.energy += 15
                 dico[key][0].existence = 0
                 
-    def Reproduction(self,dico,key):
+    def Reproduction(self,dico,key,l_free,dic_new):
         x, y = key
         l_reprod = []
         if (x+1,y) in dico and dico[(x+1,y)][1] and dico[(x+1,y)][1].type == 'mouton':
@@ -60,10 +63,13 @@ class Sheep():
                     
         if len(l_reprod) > 0:
             self.energy -= 20
-            new_pos = rd.choice(l_reprod)
+            new_pos = random.choice(l_reprod)
             new_sheep = Sheep('mouton', 0, 20)
+            pos_baby = random.choice(l_free)
+            dic_new[pos_baby] = (dico[pos_baby][0], new_sheep)
             
     def Move(self,dico,dic_new,key, l_free):
+        animal = dico[key][1]
         # Regarde les voisins pour voir s'il y a de l'herbe"""
         l_grass = []
         x, y = key
@@ -77,16 +83,15 @@ class Sheep():
             l_grass.append((x,y-1))
                 
         if len(l_grass) > 0:
-            new_pos = rd.choice(l_grass)
+            new_pos = random.choice(l_grass)
         if len(l_grass) == 0:
             # Déplace le mouton
-            new_pos = rd.choice(l_free) # VÉRIFIER QUEE LA CASE EST LIBRE ET DANS LE CADRE!!!!!!!!!!!!!!!!!!!!
+            if l_free != []:
+                new_pos = random.choice(l_free) 
             
-        dic_new[new_pos] = (dico[new_pos][0], self) # RETIRER L'ANIMAL DE SA CASE ACTUELLE !!!!!!!!!!!!!!!!!!!
+        dic_new[new_pos] = (dico[new_pos][0], animal)
         dic_new[key] = (dico[key][0], None)
         
-    
-    
         
     
 class Wolf():
