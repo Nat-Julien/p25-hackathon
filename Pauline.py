@@ -1,5 +1,6 @@
 import pyxel 
 import random
+from copy import deepcopy
 #from Nathan import Grass
 #from Melina import Sheep
 #from Melina import Wolf
@@ -16,7 +17,7 @@ class Grass:
         if self.regeneration==7:
             self.existence=1
         if self.existence==0 and self.regeneration==-1: #fais spawn de l'herbe aléatoirement
-            if random.random() <=0.05 : 
+            if random.random() <= 0.05 : 
                 self.existence=1
                 self.regeneration=0
 
@@ -27,59 +28,53 @@ class Sheep:
         self.energy = energy
     
     def update(self, dico):
-        #dic_new = dico.copy()
+        dic_new = deepcopy(dico)
         
         for key in dico:
             x, y = key
             l_free=[]
             animal = dico[key][1]
             herbe = dico[key][0]
-            if (x+1,y) in dico and dico[(x+1,y)][1] is None:
+            if (x+1,y) in dico and dic_new[(x+1,y)][1] is None:
                 l_free.append((x+1,y))
-            if (x-1,y) in dico and dico[(x-1,y)][1] is None:
+            if (x-1,y) in dico and dic_new[(x-1,y)][1] is None :
                 l_free.append((x-1,y))
-            if (x,y+1) in dico and dico[(x,y+1)][1] is None:
+            if (x,y+1) in dico and dic_new[(x,y+1)][1] is None:
                 l_free.append((x,y+1))
-            if (x,y-1) in dico and dico[(x,y-1)][1] is None:
+            if (x,y-1) in dico and dic_new[(x,y-1)][1] is None:
                 l_free.append((x,y-1)) # Mouvements possibles
             
             if dico[key][1]!= None and animal.type == "mouton":
-                
-                animal.age += 1
-                animal.energy -=1
-                
-                animal.Mort(dico,key)
                 animal.OnGrass(dico,key)
-            
+                animal.age += 1
+                animal.Mort(dico,key,dic_new)
                 if animal.energy > 50:
-                    animal.Reproduction(dico,key,l_free)
-            
-                animal.Move(dico,key, l_free)
-        #dico = dic_new.copy()                  
-        
-        return dico
+                    animal.Reproduction(dico,key,l_free,dic_new)
+
+                animal.Move(dico,dic_new,key, l_free)
+        return (deepcopy(dic_new))
                
                
-    def Mort(self,dico,key):
+    def Mort(self,dico,key,dic_new):
         animal = dico[key][1]
         if animal.age > 50 or animal.energy <= 0:
-            dico[key] = (dico[key][0], None)
+            dic_new[key] = (dico[key][0], None)
                     
     
     def OnGrass(self,dico,key):
         if dico[key][0].existence == 1:
                 self.energy += 15
                 dico[key][0].existence = 0
+                dico[key][0].regeneration = 0
                 
-    def Reproduction(self,dico,key,l_free):
-        if self.energy > 50 and l_free != []:
-            self.energy -=20
-            new_sheep = Sheep('mouton', 0, 20)
+    def Reproduction(self,dico,key,l_free,dic_new):
+        new_sheep = Sheep('mouton', 0, 20)
+
+        if len(l_free)>0 :
             pos_baby = random.choice(l_free)
-            dico[pos_baby] = (dico[pos_baby][0], new_sheep)
-        
+            dic_new[pos_baby] = (dico[pos_baby][0], new_sheep)
             
-    def Move(self,dico,key, l_free):
+    def Move(self,dico,dic_new,key,l_free):
         animal = dico[key][1]
         # Regarde les voisins pour voir s'il y a de l'herbe"""
         l_grass = []
@@ -92,15 +87,16 @@ class Sheep:
             l_grass.append((x,y+1))
         if (x,y-1) in dico and dico[(x,y-1)][0].existence == 1:
             l_grass.append((x,y-1))
-        new_pos = (x,y)       
+                
         if len(l_grass) > 0:
             new_pos = random.choice(l_grass)
+            dic_new[new_pos] = (dico[new_pos][0], animal)
+            dic_new[key] = (dico[key][0], None)
         elif len(l_grass) == 0 and len(l_free) > 0:
             # Déplace le mouton
-            new_pos = random.choice(l_free) 
-        if new_pos != (x,y) : 
-            dico[new_pos] = (dico[new_pos][0], animal)
-            dico[key] = (dico[key][0], None)
+            new_pos = random.choice(l_free)  
+            dic_new[new_pos] = (dico[new_pos][0], animal)
+            dic_new[key] = (dico[key][0], None)
         
 
 class Wolf:
@@ -110,20 +106,19 @@ class Wolf:
         self.energy = energy
     
     def update(self, dico):
-        #dic_new = dico.copy()
-        
+        dic_new = dico.copy()
         for key in dico:
             x, y = key
             l_free=[]
             animal = dico[key][1]
             herbe = dico[key][0]
-            if (x+1,y) in dico and dico[(x+1,y)][1] is None:
+            if (x+1,y) in dico and dic_new[(x+1,y)][1] is None:
                 l_free.append((x+1,y))
-            if (x-1,y) in dico and dico[(x-1,y)][1] is None:
+            if (x-1,y) in dico and dic_new[(x-1,y)][1] is None:
                 l_free.append((x-1,y))
-            if (x,y+1) in dico and dico[(x,y+1)][1] is None:
+            if (x,y+1) in dico and dic_new[(x,y+1)][1] is None:
                 l_free.append((x,y+1))
-            if (x,y-1) in dico and dico[(x,y-1)][1] is None:
+            if (x,y-1) in dico and dic_new[(x,y-1)][1] is None:
                 l_free.append((x,y-1)) # Mouvements possibles
             
             if dico[key][1]!= None and animal.type == "loup":
@@ -131,24 +126,20 @@ class Wolf:
                 animal.age += 1
                 animal.energy -=1
                 
-                animal.Mort(dico,key)
+                animal.Mort(dico,key,dic_new)
                 animal.MangeAdjSheep(dico,key)
             
                 if animal.energy > 80:
                     animal.Reproduction(dico,key,l_free)
             
                 animal.Move(dico,key, l_free)
-        #dico = dic_new.copy()                  
+        dico = deepcopy(dic_new)                  
         
         return dico
-               
-               
-    def Mort(self,dico,key):
+    def Mort(self,dico,key,dic_new):
         animal = dico[key][1]
         if animal.age > 50 or animal.energy <= 0:
-            dico[key] = (dico[key][0], None)
-                    
-    
+            dic_new[key] = (dico[key][0], None)
     def MangeAdjSheep(self,dico,key):
         l_adj=[]
         x,y=key
@@ -189,13 +180,13 @@ class Wolf:
 GRID_SIZE = 20
 SIDE = 16
 INITIAL_SHEEP = 50
-INITIAL_WOLVES = 10
+INITIAL_WOLVES = 7
 INITIAL_GLASS_COVERAGE  = 0.3 #30% de la surface est couverte par de l'herbe 
 
-class Grid : 
+class Grid: 
 
     def __init__(self):
-        pyxel.init(GRID_SIZE*SIDE,GRID_SIZE*SIDE,fps = 10, title = "Ecosystème")
+        pyxel.init(GRID_SIZE*SIDE,GRID_SIZE*SIDE,fps = 5, title = "Ecosystème")
         pyxel.load("Dessins.pyxres")
         self.grille = self.grid_initiale()
         pyxel.run(self.update,self.draw)
@@ -214,8 +205,8 @@ class Grid :
                 Grass.update(self.grille[(x,y)][0])
     
     def update_sheep(self):
-        Sheep.update(self,self.grille)
-    
+        self.grille=Sheep.update(self,self.grille)
+
     def update_wolf(self):
         Wolf.update(self,self.grille)
 
