@@ -50,6 +50,7 @@ class Sheep:
                 animal.Mort(dico,key,dic_new)
                 if animal.energy > 50:
                     animal.Reproduction(dico,key,l_free,dic_new)
+
                 animal.Move(dico,dic_new,key, l_free)
         return (deepcopy(dic_new))
                
@@ -67,11 +68,12 @@ class Sheep:
                 
     def Reproduction(self,dico,key,l_free,dic_new):
         new_sheep = Sheep('mouton', 0, 20)
+
         if len(l_free)>0 :
             pos_baby = random.choice(l_free)
             dic_new[pos_baby] = (dico[pos_baby][0], new_sheep)
             
-    def Move(self,dico,dic_new,key, l_free):
+    def Move(self,dico,dic_new,key,l_free):
         animal = dico[key][1]
         # Regarde les voisins pour voir s'il y a de l'herbe"""
         l_grass = []
