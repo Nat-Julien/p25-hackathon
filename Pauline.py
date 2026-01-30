@@ -5,18 +5,28 @@ import random
 #from Melina import Wolf
 
 
-class Grass():
+class Grass:
     def __init__(self,existence,regeneration):
         self.existence=existence
         self.regeneration=regeneration
+    
+    def update(self):
+        if self.existence==0 and self.regeneration!=-1: 
+            self.regeneration+=1
+        if self.regeneration==7:
+            self.existence=1
+        if self.existence==0 and self.regeneration==-1: #fais spawn de l'herbe aléatoirement
+            if random.random() <=0.05 : 
+                self.existence=1
+                self.regeneration=0
 
-class Sheep():
+class Sheep:
     def __init__(self, type, age, energy):
         self.type = type
         self.age = age
         self.energy = energy
 
-class Wolf():
+class Wolf:
     def __init__(self, type, age, energy):
         self.type = type
         self.age = age
@@ -41,6 +51,12 @@ class Grid :
         if pyxel.btnp(pyxel.KEY_Q): #pour quitter le jeu (la croix fonctionne aussi)
             pyxel.quit()
         self.draw()
+        self.update_grass()
+        
+    def update_grass(self):
+        for x in range(GRID_SIZE):
+            for y in range(GRID_SIZE):
+                Grass.update(self.grille[(x,y)][0])
     
     def draw(self):
         pyxel.cls(0)
@@ -50,7 +66,6 @@ class Grid :
 
     def grid_initiale(self):
         grille = {(x,y):[Grass(0,-1),None] for x in range(GRID_SIZE) for y in range(GRID_SIZE)} 
-        #(position):[0 si rien, 1 si herbe; age herbe (-1 si jamais eu herbe);("mouton ou loup" ou None;age mouton/age loup (ou None); energy)]
         n = 0
         m = 0
         l = 0
