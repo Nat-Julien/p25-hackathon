@@ -1,5 +1,5 @@
 Pour le choix de la structure : 
-on utilise le dictionnaire : repartition
+on utilise le dictionnaire : grille
 dont les clés sont les coordonnées (x,y)
 les valeurs sont une liste : [presence_herbe,age_herbe,(animal,age_animal,energie_animal)]
 
