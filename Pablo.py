@@ -51,7 +51,7 @@ class Sheep:
                 animal.OnGrass(dico,key)
             
                 if animal.energy > 50:
-                    animal.Reproduction(dico,key,l_free,dic_new)
+                    animal.Reproduction(dico,key,l_free)
             
                 animal.Move(dico,dic_new,key, l_free)
                                   
@@ -71,7 +71,7 @@ class Sheep:
                 dico[key][0].existence = 0
                 
                   
-    def Reproduction(self,dico,key,l_free):
+    def Reproduction(self,dico,key,l_free,dic_new):
         x, y = key
         if self.energy > 50 and l_free != []:
             self.energy -=20
@@ -126,7 +126,7 @@ class Wolf:
             if (x,y-1) in dico and dic_new[(x,y-1)][1] is None:
                 l_free.append((x,y-1)) # Mouvements possibles
             
-            if dico[key][1]!= None and animal.type == "mouton":
+            if dico[key][1]!= None and animal.type == "sheep":
                 
                 animal.age += 1
                 
@@ -134,7 +134,7 @@ class Wolf:
                 animal.OnSheep(dico,key)
             
                 if animal.energy > 50:
-                    animal.Reproduction(dico,key,l_free,dic_new)
+                    animal.Reproduction(dico,key,l_free)
             
                 animal.Move(dico,dic_new,key, l_free)
                                   
