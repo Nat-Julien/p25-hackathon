@@ -8,7 +8,7 @@ class Wolf:
         self.energy = energy
     
     def update(self, dico):
-        dic_new = dico.copy()
+        dic_new = deepcopy(dico)
         for key in dico:
             x, y = key
             l_free=[]
@@ -26,7 +26,7 @@ class Wolf:
             if dico[key][1]!= None and animal.type == "loup":
                 
                 animal.age += 1
-                animal.energy -=1
+                animal.energy -=2
                 
                 animal.Mort(dico,key,dic_new)
                 animal.MangeAdjSheep(dico,key)
@@ -40,7 +40,7 @@ class Wolf:
         return dico
     def Mort(self,dico,key,dic_new):
         animal = dico[key][1]
-        if animal.age > 40 or animal.energy <= 0:
+        if animal.age > 40 or animal.energy <=0:
             dic_new[key] = (dico[key][0], None)
     def MangeAdjSheep(self,dico,key):
         l_adj=[]

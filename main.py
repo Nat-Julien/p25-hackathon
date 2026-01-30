@@ -1,10 +1,12 @@
 #Importation des bibliothèques. Utilisation de Pyxel pour l'interface
 import pyxel 
 import random
+import matplotlib.pyplot as plt
+
 from GrassClass import Grass
 from SheepClass import Sheep
 from WolfClass import Wolf
-
+plt.ion()
 #configuration initiale
 GRID_SIZE = 20
 SIDE = 16
@@ -18,7 +20,10 @@ class Grid :
         pyxel.init(GRID_SIZE*SIDE,GRID_SIZE*SIDE,fps = 10, title = "Ecosystème")
         pyxel.load("Dessins.pyxres") #Dessin des loups et moutons
         self.grille = self.grid_initiale() #Initialisation de la grille par la fonction ci-dessous
+        self.stat_sheep=[]
+        self.stat_wolf=[]
         pyxel.run(self.update,self.draw)
+        
     
     #Initialisation de la grille = dico avec CLES=Position (x,y) des cases ; Valeurs [Herbe, Animal]
     def grid_initiale(self):
@@ -46,7 +51,7 @@ class Grid :
 
     #ACTUALISATION
     def update(self):
-        if pyxel.btnp(pyxel.KEY_Q): #pour quitter le jeu (la croix fonctionne aussi)
+        if pyxel.btnp(pyxel.KEY_C): #pour quitter le jeu (la croix fonctionne aussi)
             pyxel.quit()
         self.draw() #Fonction dessin
         self.update_grass()  #Actualisation de l'herbe
@@ -71,9 +76,24 @@ class Grid :
     def draw(self):
         pyxel.cls(0)
         self.draw_grille() #Dessin de grille (à tout instant t) Cases + Herbe + Animaux 
-    
+        self.plot_stat()
+
+    def plot_stat(self):
+        x=[i for i in range(0,len(self.stat_sheep))]
+        plt.plot(x,self.stat_sheep, "r--", label='Mouton')
+        plt.title("Evolution des populations")
+        plt.plot(x,self.stat_wolf, "b--",label='Loup')
+        if len(x)==1 : 
+            plt.legend()
+        
+        plt.show(block=False)
+        plt.pause(0.01)
+        
+
     #Dessiner la grille avec l'herbe + Animaux
     def draw_grille(self):
+        number_wolfe=0
+        number_sheep=0
         for x in range(GRID_SIZE):
             for y in range(GRID_SIZE):
                 if self.grille[(x,y)][0].existence == 1 :
@@ -84,10 +104,13 @@ class Grid :
                     pyxel.rect(x*SIDE, y*SIDE, SIDE, SIDE, color)
                 if self.grille[(x,y)][1] != None : 
                     if self.grille[(x,y)][1].type =="mouton":
+                        number_sheep+=1
                         pyxel.blt(x*SIDE,y*SIDE,0,0,0,SIDE,SIDE, colkey=0) #Dessin depuis le fichier dessin
                     elif self.grille[(x,y)][1].type =="loup":
+                        number_wolfe+=1
                         pyxel.blt(x*SIDE,y*SIDE,0,0,SIDE,SIDE,SIDE, colkey=7) #Idem
-
+        self.stat_sheep.append(number_sheep)
+        self.stat_wolf.append(number_wolfe)
 
 if __name__ == "__main__":
     Grid()
