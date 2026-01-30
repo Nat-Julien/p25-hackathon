@@ -34,8 +34,9 @@ class Sheep:
                     animal.Reproduction(dico,key,l_free,dic_new)
             
                 animal.Move(dico,dic_new,key, l_free)
-                                  
-        dico[key] = dic_new[key]
+        dico = dic_new.copy()                  
+        
+        return dico
                
                
     def Mort(self,dico,key,dic_new):
