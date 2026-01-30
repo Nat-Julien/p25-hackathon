@@ -71,7 +71,7 @@ class Sheep:
                 dico[key][0].existence = 0
                 
                   
-    def Reproduction(self,dico,key,l_free,dic_new):
+    def Reproduction(self,dico,key,l_free):
         x, y = key
         if self.energy > 50 and l_free != []:
             self.energy -=20
