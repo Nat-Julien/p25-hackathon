@@ -172,8 +172,8 @@ class Wolf:
         if Ate_sheep :
             new_pos = key_ate_sheep
         else : 
-            new_pose = random.choice(l_free)
-        if new_pos != (x,y) : 
+            new_pos = random.choice(l_free)
+        if new_pos != key : 
             dico[new_pos] = (dico[new_pos][0], animal)
             dico[key] = (dico[key][0], None)
     
