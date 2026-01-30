@@ -27,7 +27,7 @@ class Sheep:
         self.energy = energy
     
     def update(self, dico):
-        dic_new = dico.copy()
+        dic_new = dico.copy() #dico intermédiaire pour éviter les conflits lors des déplacements
         
         for key in dico:
             x, y = key
@@ -53,9 +53,9 @@ class Sheep:
                 if animal.energy > 50:
                     animal.Reproduction(dico,key,l_free,dic_new)
             
-                animal.Move(dico,dic_new,key, l_free)
+                animal.Move(dico,dic_new,key,l_free)
+                
         dico = dic_new.copy()                  
-        
         return dico
                
                
@@ -72,10 +72,11 @@ class Sheep:
                 
     def Reproduction(self,dico,key,l_free,dic_new):
         new_sheep = Sheep('mouton', 0, 20)
-        pos_baby = random.choice(l_free)
-        dic_new[pos_baby] = (dico[pos_baby][0], new_sheep)
+        if len(l_free) > 0:
+            pos_baby = random.choice(l_free)
+            dic_new[pos_baby] = (dico[pos_baby][0], new_sheep)
             
-    def Move(self,dico,dic_new,key, l_free):
+    def Move(self,dico,dic_new,key,l_free):
         animal = dico[key][1]
         # Regarde les voisins pour voir s'il y a de l'herbe"""
         l_grass = []
@@ -94,7 +95,8 @@ class Sheep:
         elif len(l_grass) == 0 and len(l_free) > 0:
             # Déplace le mouton
             new_pos = random.choice(l_free) 
-            
+        elif len(l_grass) == 0 and len(l_free) == 0:   
+            new_pos = key # Ne bouge pas si aucun mouvement possible
         dic_new[new_pos] = (dico[new_pos][0], animal)
         dic_new[key] = (dico[key][0], None)
         
@@ -133,7 +135,7 @@ class Grid:
                 Grass.update(self.grille[(x,y)][0])
     
     def update_sheep(self):
-        Sheep.update(self,self.grille)
+        self.grille = Sheep.update(self,self.grille)
 
     
     def draw(self):
