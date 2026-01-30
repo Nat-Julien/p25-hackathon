@@ -6,7 +6,7 @@ from SheepClass import Sheep
 from WolfClass import Wolf
 
 #configuration initiale
-GRID_SIZE = 20
+GRID_SIZE = 50
 SIDE = 16
 INITIAL_SHEEP = 50
 INITIAL_WOLVES = 10
@@ -15,7 +15,7 @@ INITIAL_GLASS_COVERAGE  = 0.3 #30% de la surface est couverte par de l'herbe
 class Grid : 
     #INITIALISATION
     def __init__(self):
-        pyxel.init(GRID_SIZE*SIDE,GRID_SIZE*SIDE,fps = 10, title = "Ecosystème")
+        pyxel.init(GRID_SIZE*SIDE,GRID_SIZE*SIDE, title = "Ecosystème")
         pyxel.load("Dessins.pyxres") #Dessin des loups et moutons
         self.grille = self.grid_initiale() #Initialisation de la grille par la fonction ci-dessous
         pyxel.run(self.update,self.draw)

@@ -26,7 +26,7 @@ class Wolf:
             if dico[key][1]!= None and animal.type == "loup":
                 
                 animal.age += 1
-                animal.energy -=1
+                animal.energy -=2
                 
                 animal.Mort(dico,key,dic_new)
                 animal.MangeAdjSheep(dico,key)
