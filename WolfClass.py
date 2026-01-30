@@ -40,7 +40,7 @@ class Wolf:
         return dico
     def Mort(self,dico,key,dic_new):
         animal = dico[key][1]
-        if animal.age > 50 or animal.energy <= 0:
+        if animal.age > 40 or animal.energy <= 0:
             dic_new[key] = (dico[key][0], None)
     def MangeAdjSheep(self,dico,key):
         l_adj=[]
