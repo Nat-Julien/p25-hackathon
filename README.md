@@ -14,6 +14,6 @@ TRAVAIL EFFECTUE :
 Pablo : positionnement initial des animaux 
 Pauline : grille initiale 
 Melina : classe mouton, loup
-Nathan : classe herbe
+Nathan : structure des données, classe herbe, gestion des problèmes
 
 - Possibilité d'utiliser une superclass ANIMUS pour les moutons et les loups (pour éviter les copiés-collés)
