@@ -136,10 +136,13 @@ class Wolf:
         dico = deepcopy(dic_new)                  
         
         return dico
+    
     def Mort(self,dico,key,dic_new):
         animal = dico[key][1]
-        if animal.age > 50 or animal.energy <= 0:
+        if animal.age > 40 or animal.energy <= 0:
             dic_new[key] = (dico[key][0], None)
+
+
     def MangeAdjSheep(self,dico,key):
         l_adj=[]
         x,y=key
@@ -180,7 +183,7 @@ class Wolf:
 GRID_SIZE = 20
 SIDE = 16
 INITIAL_SHEEP = 50
-INITIAL_WOLVES = 7
+INITIAL_WOLVES = 5
 INITIAL_GLASS_COVERAGE  = 0.3 #30% de la surface est couverte par de l'herbe 
 
 class Grid: 
