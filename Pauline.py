@@ -13,6 +13,7 @@ class Grid :
     def __init__(self):
         pyxel.init(GRID_SIZE*SIDE,GRID_SIZE*SIDE,title = "Ecosystème")
         self.grille = self.grid_initiale()
+        pyxel.load("Dessins.pyxres")
         pyxel.run(self.update,self.draw)
     
     def update(self):
@@ -25,26 +26,31 @@ class Grid :
         self.draw_grille()
         
 
-    def draw_grille(self):
-        for x in range(GRID_SIZE):
-            for y in range(GRID_SIZE):
-                if self.grille[(x,y)][0] == 1 :
-                    color = 11
-                    pyxel.rect(x*GRID_SIZE, y*GRID_SIZE, CASES, CASES, color)
-                else : 
-                    color = 4
-
     def grid_initiale(self):
         grille = {(x,y):[0,-1,(None,None,None)] for x in range(GRID_SIZE) for y in range(GRID_SIZE)} 
         #(position):[0 si rien, 1 si herbe; age herbe (-1 si jamais eu herbe);("mouton ou loup" ou None;age mouton/age loup (ou None); energy)]
         n = 0
+        m = 0
+        l = 0
         surface = (GRID_SIZE**2)*INITIAL_GLASS_COVERAGE
         while n < surface:
             i,j = random.randint(0,GRID_SIZE-1),random.randint(0,GRID_SIZE-1)
             if grille[(i,j)][0] == 0 :
                 grille[(i,j)][0] = 1
                 n+=1
+        while m < INITIAL_SHEEP :
+            i,j = random.randint(0,GRID_SIZE-1),random.randint(0,GRID_SIZE-1)
+            if self.grille[(i,j)][2][0]== None:
+                self.grille[(i,j)][2][0] == "mouton"
+                m+=1
+        while l < INITIAL_WOLVES : 
+            i,j = random.randint(0,GRID_SIZE-1),random.randint(0,GRID_SIZE-1)
+            if self.grille[(i,j)][2][0]== None:
+                self.grille[(i,j)][2][0] == "loup"
+                m+=1
         return grille
+    
+
     
     def draw_grille(self):
         for x in range(GRID_SIZE):
